@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const mongoose = require('mongoose')
 
 const Fruit = require("../model/fruit.js")        
 
@@ -27,7 +28,8 @@ router.get("/:fruitId", async (req, res, next) => {                     // Make 
     try {
 
         if (mongoose.Types.ObjectId.isValid(req.params.fruitId)) {          // 404 Error Handling
-            const foundFruit = await Fruit.findById(req.params.fruitId)     // Using teh model (layout of data) to findById of the URL id
+            const foundFruit = await Fruit.findById(req.params.fruitId)   
+            console.log(foundFruit)  // Using teh model (layout of data) to findById of the URL id
             res.render("fruits/show.ejs", { fruit: foundFruit })            // Render it on the show page. {NameYourReferencingInYourTemplate: TheVariableYou'veCollected}
         } else {
             next()                                                          // 404 Error Handling
@@ -35,6 +37,7 @@ router.get("/:fruitId", async (req, res, next) => {                     // Make 
 
 
     } catch (error) {
+        console.log(error)
         res.send('Show Page is broken')
     }
 
@@ -59,7 +62,7 @@ router.post('', async (req, res) => {                           // Making a rout
 })
 
 // ! Delete
-router.delete('/fruits/:fruitId', async (req, res) => {                 // You'll use :fruitId again as you're trying to find it via the ID
+router.delete('/:fruitId', async (req, res) => {                 // You'll use :fruitId again as you're trying to find it via the ID
     await Fruit.findByIdAndDelete(req.params.fruitId)               // Await means this bit of code will run BEFORE the lower bits - Fruit being the layout of the data
     res.redirect('/fruits')                                         // Redirect back to the page with all the bits in it
 })
@@ -67,13 +70,13 @@ router.delete('/fruits/:fruitId', async (req, res) => {                 // You'l
 
 // ! Edit
 
-router.get('/fruits/:fruitId/edit', async (req, res) => {               // Only route to use 3 URLs. Async to make sure render comes last
+router.get('/:fruitId/edit', async (req, res) => {               // Only route to use 3 URLs. Async to make sure render comes last
     const foundFruit = await Fruit.findById(req.params.fruitId)     // Model to find the ID
     res.render('fruits/edit.ejs', { fruit: foundFruit })             // Render with the page URL and Object to refer to and object
 })
 
 
-router.put('/fruits/:fruitId', async (req, res) => {                    // Async as you want to do stuff before render
+router.put('/:fruitId', async (req, res) => {                    // Async as you want to do stuff before render
     if (req.body.isReadyToEat === 'on') {                            // Changing check boxes from  string value to Boolean
         req.body.isReadyToEat = true
     } else {
