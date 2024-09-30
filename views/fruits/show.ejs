@@ -1,0 +1,30 @@
+<!-- views/fruits/show.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= fruit.name %></title> <!-- Dynamic title based on fruit name -->
+  </head>
+  <body>
+    <%- include("../partials/nav.ejs") %>
+
+    <h1><%= fruit.name %></h1> <!-- Display fruit name -->
+    <!-- Add more details about the fruit here -->
+     <% if (fruit.isReadyToEat) {  %>
+      <h3>This food is ready to eat</h3>
+     <% } else { %>
+        <h3>This food is NOT ready to eat</h3>
+     <% } %>
+
+     <!-- The Action deletes the given fruitId along with modifying the request from a POST to a DELETE with the ?_Method -->
+     <form action="/fruits/<%=fruit._id%>?_method=DELETE" method="POST">     
+        <button type="submit">Delete <%= fruit.name %></button>
+      </form>
+
+      
+      <a href="/fruits/<%= fruit._id %>/edit">Edit <%= fruit.name %></a>
+
+  </body>
+</html>
