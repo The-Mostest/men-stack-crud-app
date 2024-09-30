@@ -70,6 +70,13 @@ app.use('/auth', authRouters )
 
 
 
+app.get('/vip-lounge', (req,res) => {                                                       // Link to a specific space
+    if (req.session.user) {                                                                 // If the session user is logged in (true)
+        return res.send(`<h1>Welcome to the part-ay ${req.session.user.username}</h1>`)     // Send Message
+    } else {
+        return res.send('<h1>Sorry no nerds allowed</h1>')                                  // Send message 
+    }
+})
 
 
 //! 404

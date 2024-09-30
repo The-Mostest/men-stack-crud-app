@@ -96,15 +96,13 @@ router.post('/sign-in', async (req,res) => {                                    
 
 
 
-// Sign in User
-
-// Check Username Exists
-
-//Invalidate Unauthorised attempt with 401
-
-//Passwords don't match = 401 (same as above)
 
 
+
+router.get('/sign-out', (req,res) => {                                              // Linking to a SIGN-OUT
+    req.session.destroy()                                                           // Destroying the session 
+    res.redirect('/')                                                               // Redirecting back to a homepage
+})
 
 
 
