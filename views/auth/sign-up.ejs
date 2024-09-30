@@ -10,15 +10,16 @@
 
     <h1>Create a new account!</h1>
 
-
-    <form action="/auth/sign-up" method="POST">
+    
+    <!-- Linking the form to the section you want to fill and the METHOD is a way to 'push' new data -->
+    <form action="/auth/sign-up" method="POST">         
 
       <label for="username">Username:</label>
 
       <input type="text" name="username" id="username" />
-
       <label for="password">Password:</label>
-
+      
+      <!-- Making sure the password STATES password in type to hide text -->
       <input type="password" name="password" id="password" />
 
       <label for="confirmPassword">Confirm Password:</label>
