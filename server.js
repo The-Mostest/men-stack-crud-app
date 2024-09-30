@@ -8,7 +8,7 @@ const morgan = require('morgan')
 const methodOverride = require('method-override')                   // Sets up methodOverride for the server
 const express = require('express');                                 // Setting Up Express within your code
 const mongoose = require('mongoose')                                // Setting Up Mongoose  within your code
-// 
+const session = require('express-session')
 
 
 mongoose.connect(process.env.MONGODB_URI)                           // Using mongoose to connect the DB via the .env keyword(MONGODB_URI)
@@ -42,6 +42,11 @@ app.use(express.urlencoded({ extended: false }))                    // Telling u
 app.use(express.static("public"))                                   // How to link CSS to your CRUD app. Public is the folder that you keep stylesheets in
 app.use(morgan('dev'))
 
+app.use(session({
+    secret: process.env.SESSION_SECRET,     // The link to the env file
+    resave: false,                          // Stops saves to unmodified files
+    saveUninitialized: true                 // Create session that doesn't exist in our store
+}))
 
 
 // ! < --   Routes
@@ -49,7 +54,9 @@ app.use(morgan('dev'))
 app.get('/', async (req, res) => {
     try {
         
-        res.render('index.ejs')
+        res.render('index.ejs', {           
+            user: req.session.user          // This allows the 'user' to have a personalised session IF the statement 'user' is true
+        })
         
     } catch (error) {
         res.send('This GET isnt working')

@@ -56,9 +56,43 @@ router.post('/sign-up', async (req, res) => {                                   
 // ! -- Sign In
 
 // Sign in Route
-router.get('/sign-in', (req,res) => {
+router.get('/sign-in', (req,res) => {                                               //Fabricating the actual page into existence
+    res.render('auth/sign-in.ejs')
 
 })
+
+router.post('/sign-in', async (req,res) => {                                        // POST to use the form 
+    try {
+    const userInDatabase = await User.findOne({username: req.body.username})        // Creating a variable and using the model to find and compare the username of given
+    if(!userInDatabase){
+        return res.send('<h1>Login Failed. Please Try Again</h1>')                  // Give an invalid response THE SAME AS THE PASSWORD
+    }
+  
+    
+    const validPassword = bcrypt.compareSync(                                       // bcrypt has inbuilt password comparision systems. 
+        req.body.password,                                                          // First param is the password in the form
+        userInDatabase.password                                                     // Second is the password within the database itself
+    )
+    if(!validPassword){                                                             // Responses if the results are wrong
+        return res.send('<h1>Login Failed. Please Try Again</h1>')
+    }
+
+
+    req.session.user = {                                                            // Making a session on successful login &&&& a variable called 'user'
+        username: userInDatabase.username,                                          // This is saving their Username and their ID
+        _id: userInDatabase._id
+    }
+
+
+
+
+
+    res.redirect('/')                                                               // Redirect to another page post login
+} catch(error) {
+        console.log(error)
+        res.send('Page isnt working')
+    }
+    })
 
 
 

@@ -9,8 +9,19 @@
   </head>
   <body>
       <%- include("../views/partials/nav.ejs") %>
-    <h1>Welcome to the Fruits app!</h1>
-    <p>An app for collecting your favorite fruits.</p>
+
+
+      <!-- if user is true (exists) then welcome them with their username  -->
+      <% if (user) { %>
+        <h1>Welcome to the Fruits app <%= user.username %>!</h1>
+        <p>An app for collecting your favorite fruits.</p>
+      
+        
+        <!-- Otherwise give the links to sign up or sign in -->
+      <% } else {%>
+        <h1> You can't sit with us</h1>
+        <a href="/auth/sign-in"> Join In</a> or <a href="/auth/sign-in"> Join Up</a>
+        <% } %>
     
   </body>
 </html>
