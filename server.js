@@ -20,7 +20,11 @@ mongoose.connection.on("connected", () => {                         // Checking 
 
 const port = 3000                                                   // Making the port number dynamic with the variable
 const app = express();                                              // Creating a variable linking to the express function
-const fruitsRouters =  require('./controllers/fruitsRouters.js')          
+
+
+// ! -- Router/Controllers
+const fruitsRouters =  require('./controllers/fruitsRouters.js')
+const authRouters = require('./controllers/auth.js')
 
 // ! <-- Listen for Port
 
@@ -41,23 +45,23 @@ app.use(express.static("public"))                                   // How to li
 app.use(morgan('dev'))
 
 
-app.use('/fruits', fruitsRouters)
 
-// ! <------------------   Routes
+// ! < --   Routes
 // !  Landing Page
 app.get('/', async (req, res) => {
     try {
-
+        
         res.render('index.ejs')
-
+        
     } catch (error) {
         res.send('This GET isnt working')
     }
 })
 
 
-
-
+//! Controller Routers
+app.use('/fruits', fruitsRouters)
+app.use('/auth', authRouters )
 
 
 

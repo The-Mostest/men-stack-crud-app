@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
 
-const Fruit = require("../model/fruit.js")        
+const Fruit = require("../model/fruit.js")
 
 
 // ! Index of all Fruit
@@ -28,7 +28,7 @@ router.get("/:fruitId", async (req, res, next) => {                     // Make 
     try {
 
         if (mongoose.Types.ObjectId.isValid(req.params.fruitId)) {          // 404 Error Handling
-            const foundFruit = await Fruit.findById(req.params.fruitId)   
+            const foundFruit = await Fruit.findById(req.params.fruitId)
             console.log(foundFruit)  // Using teh model (layout of data) to findById of the URL id
             res.render("fruits/show.ejs", { fruit: foundFruit })            // Render it on the show page. {NameYourReferencingInYourTemplate: TheVariableYou'veCollected}
         } else {
@@ -42,8 +42,6 @@ router.get("/:fruitId", async (req, res, next) => {                     // Make 
     }
 
 })
-
-
 
 // ! Create
 router.post('', async (req, res) => {                           // Making a route with post to create
@@ -60,6 +58,7 @@ router.post('', async (req, res) => {                           // Making a rout
         res.send('Post is having an error')
     }
 })
+
 
 // ! Delete
 router.delete('/:fruitId', async (req, res) => {                 // You'll use :fruitId again as you're trying to find it via the ID
@@ -86,5 +85,16 @@ router.put('/:fruitId', async (req, res) => {                    // Async as you
     await Fruit.findByIdAndUpdate(req.params.fruitId, req.body)     // Find and Update the specific URL ID with the form req. bod 
     res.redirect(`/fruits/${req.params.fruitId}`)                   // Redirect to the given req.params.ID
 })
+
+
+
+
+
+
+
+
+
+
+
 
 module.exports = router
