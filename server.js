@@ -12,9 +12,7 @@ const mongoose = require('mongoose')                                // Setting U
 
 
 mongoose.connect(process.env.MONGODB_URI)                           // Using mongoose to connect the DB via the .env keyword(MONGODB_URI)
-mongoose.connection.on("connected", () => {                         // Checking the connection via a console.log
-    console.log(`Connected to MongoDB`)
-})
+
 
 //! <-- Variables
 
@@ -70,4 +68,8 @@ app.use('/auth', authRouters )
 //! 404
 app.get('*', (req, res) => {
     res.send('<h1>This page is in another castle</h1>')
+})
+
+mongoose.connection.on("connected", () => {                         // Checking the connection via a console.log
+    console.log(`Connected to MongoDB`)
 })
