@@ -82,7 +82,7 @@ app.get('/vip-lounge', isSignedIn, (req,res) => {                               
 })
 
 app.get('/secret-space', isSignedIn, (req,res) => {
-    res.render('../views/secret/secret-space.ejs')
+    res.render('/')
 
 })
 
