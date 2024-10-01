@@ -44,8 +44,9 @@ router.get("/:fruitId", async (req, res, next) => {                     // Make 
 })
 
 // ! Create
-router.post('', async (req, res) => {                           // Making a route with post to create
+router.post('/', async (req, res) => {                           // Making a route with post to create
     try {
+        req.body.user = req.session.user._id
         if (req.body.isReadyToEat === "on") {                       // Checkboxes provide a string of on or undefined
             req.body.isReadyToEat = true                            // The conversion
         } else {

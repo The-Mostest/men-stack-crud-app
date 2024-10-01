@@ -5,7 +5,8 @@ const router = express.Router();
 
 
 // Model
-const User = require('../model/user.js')                              // Imported User
+const User = require('../model/user.js');                              // Imported User
+const isSignedIn = require('../middleware/is-signed-in.js');
 
 
 // Routers
@@ -27,7 +28,7 @@ router.get('/sign-up', (req, res) => {                                 // Render
 
 
 
-router.post('/sign-up', async (req, res) => {                                       //POST to allow a 'push' of data
+router.post('/sign-up', isSignedIn, async (req, res) => {                                       //POST to allow a 'push' of data
     try {
         const userInDatabse = await User.findOne({ username: req.body.username })     // Checking the username isn't taken from the data stored in the MODEL
         if (userInDatabse) {
@@ -42,11 +43,12 @@ router.post('/sign-up', async (req, res) => {                                   
 
 
         const newUser = await User.create(req.body)                                 // Creating the actual user itself WITHIN the model
-
         req.session.user = {                                                        //Create a session AS SOON AS the user signs-up to the app
             username: newUser.username,                                             // Finding the username in the database which is the previously created variable.username
             _id: newUser._id                                                        // The unique ID
+
         }
+        req.body.owner = req.session.user._id
         req.session.save(() => {                                                    // This allows the user to instantly save the session their in and so sign up = sign in
             res.redirect('/')                                                       // Redirect post sign up
         })
@@ -95,7 +97,7 @@ router.post('/sign-in', async (req, res) => {                                   
 
         req.session.save(() => {                                                        // Saves the session to MongoDB and keep the user signed in on si
             res.redirect('/')                                                           // Redirect to another page post login
-        }) 
+        })
     } catch (error) {
         console.log(error)
         res.send('Page isnt working')
@@ -110,7 +112,7 @@ router.post('/sign-in', async (req, res) => {                                   
 router.get('/sign-out', (req, res) => {                                              // Linking to a SIGN-OUT
     req.session.destroy(() => {                                                      // Destroying the session from MongoDB
         res.redirect('/')                                                            // Redirecting back to a homepage
-    })                                                   
+    })
 })
 
 

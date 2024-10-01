@@ -19,7 +19,9 @@
     <ol>
          <!-- Makes each that has been connected to the server render into a list with their name -->
         <% fruits.forEach(fruit => { %>       
-         <li><a href="/fruits/<%=fruit._id%>"><%= fruit.name %></a></li>
+         <li class="lists">
+          <a href="/fruits/<%=fruit._id%>"><%= fruit.name %> <%= </a>
+        </li>
         <% }) %>
     </ol>
   </body>
