@@ -10,7 +10,8 @@ const express = require('express');                                 // Setting U
 const mongoose = require('mongoose')                                // Setting Up Mongoose  within your code
 const session = require('express-session')
 const MongoStore = require('connect-mongo')                         // Adding MongoStore to the app
-
+const isSignedIn = require('./middleware/is-signed-in.js')          // Import from the other file
+const passUserToView = require('./middleware/pass-user-to-view.js') // Import from the other file
 
 mongoose.connect(process.env.MONGODB_URI)                           // Using mongoose to connect the DB via the .env keyword(MONGODB_URI)
 
@@ -50,7 +51,8 @@ app.use(session({
         mongoUrl: process.env.MONGODB_URI,  // Linking the URL to MONGODB_URI
     })
 }))
-
+app.use(passUserToView)                     // BE SPECIFIC WHEN you place this. It needs to be used in all the routes BUT it needs to use session data
+                                            // If placed correctly it means no other thing needs to use req.session.user as it all should have a res.local
 
 // ! < --   Routes
 // !  Landing Page
@@ -58,12 +60,12 @@ app.get('/', async (req, res) => {
     try {
         
         res.render('index.ejs', {           
-            user: req.session.user          // This allows the 'user' to have a personalised session IF the statement 'user' is true
+           
         })
         
     } catch (error) {
         res.send('This GET isnt working')
-    }
+    }       
 })
 
 
@@ -73,12 +75,15 @@ app.use('/auth', authRouters )
 
 
 
-app.get('/vip-lounge', (req,res) => {                                                       // Link to a specific space
-    if (req.session.user) {                                                                 // If the session user is logged in (true)
+app.get('/vip-lounge', isSignedIn, (req,res) => {                                           // This is now linked to the middleware we created in the other file
+                                                                                            // If the session user is logged in (true)
         return res.send(`<h1>Welcome to the part-ay ${req.session.user.username}</h1>`)     // Send Message
-    } else {
-        return res.send('<h1>Sorry no nerds allowed</h1>')                                  // Send message 
-    }
+    
+})
+
+app.get('/secret-space', isSignedIn, (req,res) => {
+    res.render('../views/secret/secret-space.ejs')
+
 })
 
 
