@@ -5,6 +5,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+
     <title><%= fruit.name %></title> <!-- Dynamic title based on fruit name -->
   </head>
   <body>
@@ -19,7 +21,7 @@
      <% } %>
 
      <!-- The Action deletes the given fruitId along with modifying the request from a POST to a DELETE with the ?_Method -->
-     <form action="/fruits/<%=fruit._id%>?_method=DELETE" method="POST">     
+     <form class='form' action="/fruits/<%=fruit._id%>?_method=DELETE" method="POST">     
         <button type="submit">Delete <%= fruit.name %></button>
       </form>
 

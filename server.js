@@ -9,6 +9,7 @@ const methodOverride = require('method-override')                   // Sets up m
 const express = require('express');                                 // Setting Up Express within your code
 const mongoose = require('mongoose')                                // Setting Up Mongoose  within your code
 const session = require('express-session')
+const MongoStore = require('connect-mongo')                         // Adding MongoStore to the app
 
 
 mongoose.connect(process.env.MONGODB_URI)                           // Using mongoose to connect the DB via the .env keyword(MONGODB_URI)
@@ -41,11 +42,13 @@ app.use(methodOverride("_method"))                                  // "_Method"
 app.use(express.urlencoded({ extended: false }))                    // Telling us that we want to access the forms inside the request variable INSIDE the post Method
 app.use(express.static("public"))                                   // How to link CSS to your CRUD app. Public is the folder that you keep stylesheets in
 app.use(morgan('dev'))
-
 app.use(session({
     secret: process.env.SESSION_SECRET,     // The link to the env file
     resave: false,                          // Stops saves to unmodified files
-    saveUninitialized: true                 // Create session that doesn't exist in our store
+    saveUninitialized: true,                // Create session that doesn't exist in our store
+    store: MongoStore.create({              // This creates a store within the database MONGODB to save your session across browser entry/exit
+        mongoUrl: process.env.MONGODB_URI,  // Linking the URL to MONGODB_URI
+    })
 }))
 
 
