@@ -19,15 +19,18 @@
      <% } else { %>
         <h3>This food is NOT ready to eat</h3>
      <% } %>
-     <h3>Created By: <%= user.username %></h3>
+     
 
      <!-- The Action deletes the given fruitId along with modifying the request from a POST to a DELETE with the ?_Method -->
-     <form class='form' action="/fruits/<%=fruit._id%>?_method=DELETE" method="POST">     
+     <% if (fruit.user._id.equals(user._id)) { %>
+      
+      <form class='form' action="/fruits/<%=fruit._id%>?_method=DELETE" method="POST">     
         <button type="submit">Delete <%= fruit.name %></button>
       </form>
-
       
       <a href="/fruits/<%= fruit._id %>/edit">Edit <%= fruit.name %></a>
-
+      <% } %>
+      
+      <h3>Created By: <%= fruit.user.username %></h3>
   </body>
 </html>

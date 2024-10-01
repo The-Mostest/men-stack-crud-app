@@ -24,4 +24,3 @@ module.exports = User                           // Exporting the model
 
 
 
-

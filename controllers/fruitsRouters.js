@@ -28,7 +28,7 @@ router.get("/:fruitId", async (req, res, next) => {                     // Make 
     try {
 
         if (mongoose.Types.ObjectId.isValid(req.params.fruitId)) {          // 404 Error Handling
-            const foundFruit = await Fruit.findById(req.params.fruitId)
+            const foundFruit = await Fruit.findById(req.params.fruitId).populate('user')
             console.log(foundFruit)  // Using teh model (layout of data) to findById of the URL id
             res.render("fruits/show.ejs", { fruit: foundFruit })            // Render it on the show page. {NameYourReferencingInYourTemplate: TheVariableYou'veCollected}
         } else {
@@ -63,16 +63,37 @@ router.post('/', async (req, res) => {                           // Making a rou
 
 // ! Delete
 router.delete('/:fruitId', async (req, res) => {                 // You'll use :fruitId again as you're trying to find it via the ID
-    await Fruit.findByIdAndDelete(req.params.fruitId)               // Await means this bit of code will run BEFORE the lower bits - Fruit being the layout of the data
-    res.redirect('/fruits')                                         // Redirect back to the page with all the bits in it
+
+    const deletedFruit = await Fruit.findId(req.params.fruitId)                // Await means this bit of code will run BEFORE the lower bits - Fruit being the layout of the data
+
+    if (deletedFruit.user.equals(req.session.user._id)) {
+        await Fruit.findByIdAndDelete(req.params.fruitId)
+        return res.redirect('/fruits')                                         // Redirect back to the page with all the bits in it
+    } else {
+        return res.send('Go Away')
+    }
+
+
+
 })
 
 
 // ! Edit
 
-router.get('/:fruitId/edit', async (req, res) => {               // Only route to use 3 URLs. Async to make sure render comes last
+router.get('/:fruitId/edit', async (req, res, next) => {               // Only route to use 3 URLs. Async to make sure render comes last
+    
     const foundFruit = await Fruit.findById(req.params.fruitId)     // Model to find the ID
-    res.render('fruits/edit.ejs', { fruit: foundFruit })             // Render with the page URL and Object to refer to and object
+
+    if (foundFruit.user.equals(req.session.user._id)) {
+        await Fruit.findByIdAndUpdate(req.params.fruitId, req.body)
+        console.log('Working') 
+
+        res.render('fruits/edit.ejs', { fruit: foundFruit })             // Render with the page URL and Object to refer to and object
+    } else {
+        return res.send('Go Away')
+    }
+
+
 })
 
 
