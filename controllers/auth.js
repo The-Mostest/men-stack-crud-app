@@ -24,12 +24,13 @@ router.get('/sign-up', (req, res) => {                                 // Render
 
 
 
-// ! -- Create User
+// ! -- Sign Up
 
 
 
-router.post('/sign-up', isSignedIn, async (req, res) => {                                       //POST to allow a 'push' of data
+router.post('/sign-up', async (req, res) => {                                       //POST to allow a 'push' of data
     try {
+        
         const userInDatabse = await User.findOne({ username: req.body.username })     // Checking the username isn't taken from the data stored in the MODEL
         if (userInDatabse) {
             return res.send('<h2>Username Has Been Taken</h2>')
@@ -71,8 +72,10 @@ router.get('/sign-in', (req, res) => {                                          
 
 router.post('/sign-in', async (req, res) => {                                        // POST to use the form 
     try {
+        console.log(req.body)
         const userInDatabase = await User.findOne({ username: req.body.username })        // Creating a variable and using the model to find and compare the username of given
         if (!userInDatabase) {
+
             return res.send('<h1>Login Failed. Please Try Again</h1>')                  // Give an invalid response THE SAME AS THE PASSWORD
         }
 

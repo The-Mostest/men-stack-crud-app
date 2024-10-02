@@ -25,7 +25,7 @@ router.get("/:fruitId", async (req, res, next) => {                     // Make 
 
         if (mongoose.Types.ObjectId.isValid(req.params.fruitId)) {          // 404 Error Handling
             const foundFruit = await Fruit.findById(req.params.fruitId).populate('user').populate('comments.user')
-            console.log(foundFruit)  // Using teh model (layout of data) to findById of the URL id
+            console.log(foundFruit)                                         // Using teh model (layout of data) to findById of the URL id
             res.render("fruits/show.ejs", { fruit: foundFruit })            // Render it on the show page. {NameYourReferencingInYourTemplate: TheVariableYou'veCollected}
         } else {
             next()                                                          // 404 Error Handling
@@ -34,7 +34,7 @@ router.get("/:fruitId", async (req, res, next) => {                     // Make 
 
     } catch (error) {
         console.log(error)
-       return res.status(500).send('An Error Occurred')
+        res.send('Show Page is broken')
     }
 
 })
@@ -44,13 +44,8 @@ router.get("/:fruitId", async (req, res, next) => {                     // Make 
 // * Render Page
 
 router.get('/new', (req, res) => {
-    try {
     res.render('fruits/new.ejs')
     // console.log('Fruits new is working')
-    }catch(error){
-        console.log(error)
-        res.status(error).send('This link is broken')
-    }
 })
 
 
@@ -69,7 +64,7 @@ router.post('/', async (req, res) => {                           // Making a rou
         res.redirect('/fruits')
     }                                // After that has run, it redirects back to the form to allow you to input again
     catch (error) {
-        res.status(500).render('fruits/new.ejs')
+        res.send('Post is having an error')
     }
 })
 
@@ -162,10 +157,7 @@ router.delete('/:fruitId/comments/:commentsId/', async (req, res, next) => {
         const commentToDelete = fruit.comments.id(req.params.commentsId)        // Variable commentToDelete = fruit we founds comment ID = the comment ID on the resource
         if (!commentToDelete)  next()
 
-        if(!commentToDelete.user.equals(req.session.user._id)) {
-            throw new Error('current user is not allowed to delete this comment')
-        }
-
+   
         commentToDelete.deleteOne()                                             // Delete the single comment we found
         await fruit.save()                                                      // save the comment delete
 
