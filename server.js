@@ -12,6 +12,7 @@ const session = require('express-session')
 const MongoStore = require('connect-mongo')                         // Adding MongoStore to the app
 const isSignedIn = require('./middleware/is-signed-in.js')          // Import from the other file
 const passUserToView = require('./middleware/pass-user-to-view.js') // Import from the other file
+const allowErrors = require('./middleware/allow-errors.js')
 
 mongoose.connect(process.env.MONGODB_URI)                           // Using mongoose to connect the DB via the .env keyword(MONGODB_URI)
 
@@ -53,6 +54,8 @@ app.use(session({
 }))
 app.use(passUserToView)                                             // BE SPECIFIC WHEN you place this. It needs to be used in all the routes BUT it needs to use session data
                                                                     // If placed correctly it means no other thing needs to use req.session.user as it all should have a res.local
+app.use(allowErrors)
+
 
 // ! < --   Routes
 // !  Landing Page

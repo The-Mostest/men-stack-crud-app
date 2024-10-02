@@ -15,7 +15,7 @@ const commentSchema = new mongoose.Schema({                                 // N
 
 
 const fruitSchema = new mongoose.Schema({             // creating the Schema and giving it a almost ruleset to follow
-    name: String,
+    name: {type: String, required: true},
     isReadyToEat: Boolean,
     user: {type: mongoose.Types.ObjectId, ref: 'User', required: true},
     comments: [commentSchema]

@@ -2,56 +2,88 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/stylesheets/style.css" />
 
-    <title><%= fruit.name %></title> <!-- Dynamic title based on fruit name -->
-  </head>
-  <body>
-    <%- include("../partials/nav.ejs") %>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/stylesheets/style.css" />
 
-    <h1><%= fruit.name %></h1> <!-- Display fruit name -->
+  <title>
+    <%= fruit.name %>
+  </title> <!-- Dynamic title based on fruit name -->
+</head>
+
+<body>
+  <%- include("../partials/nav.ejs") %>
+
+    <h1>
+      <%= fruit.name %>
+    </h1> <!-- Display fruit name -->
     <!-- Add more details about the fruit here -->
-     <% if (fruit.isReadyToEat) {  %>
+    <% if (fruit.isReadyToEat) { %>
       <h3>This food is ready to eat</h3>
-     <% } else { %>
+      <% } else { %>
         <h3>This food is NOT ready to eat</h3>
-     <% } %>
-     
-
-     <!-- The Action deletes the given fruitId along with modifying the request from a POST to a DELETE with the ?_Method -->
-      <!-- user does not equal nothing & the user within the fruit resource is equal to the user If  -->
-     <% if (user !== null && fruit.user._id.equals(user._id)) { %>
-      
-      <form class='form' action="/fruits/<%=fruit._id%>?_method=DELETE" method="POST">     
-        <button type="submit">Delete <%= fruit.name %></button>
-      </form>
-      
-      <a href="/fruits/<%= fruit._id %>/edit">Edit <%= fruit.name %></a>
-      <% } %>
-      
-
-      
-      <h3>Created By: <%= fruit.user.username %></h3>
+        <% } %>
 
 
-<!-- Comment Section -->
- <% if (user) { %>
-  <!-- Resource is. Basic resource/Id of the resource you want to access/comment section -->
-  <form action="/fruits/<%= fruit._id %>/comments" method="POST"> 
-    <label for="text">Comment:</label> 
-    <input type="text" name="text" id="text">
-    <button class="button" type="submit"> Add Comment</button>
-    </form>
-  
- <% }else { %>
-      <p> <a href="/auth/sign-in">Sign in to Leave Comment</a></p>
+          <!-- The Action deletes the given fruitId along with modifying the request from a POST to a DELETE with the ?_Method -->
+          <!-- user does not equal nothing & the user within the fruit resource is equal to the user If  -->
+          <% if (user !==null && fruit.user._id.equals(user._id)) { %>
 
-<%}%>
+            <form class='form' action="/fruits/<%=fruit._id%>?_method=DELETE" method="POST">
+              <button type="submit">Delete <%= fruit.name %></button>
+            </form>
+
+            <a href="/fruits/<%= fruit._id %>/edit">Edit <%= fruit.name %></a>
+            <% } %>
 
 
 
-  </body>
+              <h3>Created By: <%= fruit.user.username %>
+              </h3>
+
+
+              <!-- Comment Section -->
+              <% if (user) { %>
+                <!-- Resource is. Basic resource/Id of the resource you want to access/comment section -->
+                <form action="/fruits/<%= fruit._id %>/comments" method="POST">
+                  <label for="text">Comment:</label>
+                  <input type="text" name="text" id="text">
+                  <button class="button" type="submit"> Add Comment</button>
+                </form>
+
+                <% }else { %>
+                  <p> <a href="/auth/sign-in">Sign in to Leave Comment</a></p>
+
+                  <%}%>
+
+                    <!-- Display Comments -->
+
+                    <div class="comments">
+                      <p>
+                        <% fruit.comments.forEach(comment=> { %>
+                          <div class="comment">
+                            <strong>
+                              <%= comment.user.username %>:
+                            </strong>
+                            <%= comment.text %> <br>
+                              <small>Written on: <%= new Date(comment.createdAt).toUTCString() %></small>
+
+                              <form class="delete"
+                                action="/fruits/<%= fruit._id %>/comments/<%= comment._id  %>?_method=DELETE"
+                                method="POST">
+                                <button type="submit">Delete</button>
+                                <% }) %>
+                              </form>
+                          </div>
+                      </p>
+
+
+                    </div>
+
+
+
+</body>
+
 </html>

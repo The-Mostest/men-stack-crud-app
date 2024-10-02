@@ -1,56 +1,71 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz@9..40&display=swap");
 
 body {
-    background: #fff8ed;
-    font-family: "DM Sans", sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    max-width: 100vw;
-  }
-  
-  h1 {
-    color: #769642;
-    font-size: 3.6em;
-  }
-  
-  footer {
-    font-size: 0.7em;
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-    padding: 10px;
-  }
-  
-  .fruit-pic1 {
-    height: 30%;
-    margin: 50px;
-  }
-  
+  background: #fff8ed;
+  font-family: "DM Sans", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 100vw;
+  font-family: helvetica;
+}
+
+h1 {
+  color: #769642;
+  font-size: 3.6em;
+}
+
+footer {
+  font-size: 0.7em;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+}
+
+.fruit-pic1 {
+  height: 30%;
+  margin: 50px;
+}
 
 
-  nav {
-    display: flex;
-    justify-content: space-between;
-    width: 50%;
-  }
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+}
 
 
-  .form {
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-  }
+.form {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
 
-  .form button {
-    margin: 10px;
-  }
+.form button {
+  margin: 10px;
+}
 
 
-  .secretSpace {
-    background-image: url("../Images/SecretBackground.gif");
+.secretSpace {
+  background-image: url("../Images/SecretBackground.gif");
 
-  }
+}
+
+.comments {
+  display: flex;
+}
+
+.comment {
+  margin-top: 40px;
+  position: relative;
+}
+
+.comment form {
+
+
+}

@@ -3,6 +3,7 @@ const router = express.Router()
 const mongoose = require('mongoose')
 
 const Fruit = require("../model/fruit.js")
+const isSignedIn = require('../middleware/is-signed-in.js')
 
 
 // ! Index of all Fruit
@@ -21,21 +22,21 @@ router.get('', async (req, res) => {                            // New route for
 // ! Show
 router.get("/:fruitId", async (req, res, next) => {                     // Make sure that you add the ':' after the / - this templates the object
     try {
-        
+
         if (mongoose.Types.ObjectId.isValid(req.params.fruitId)) {          // 404 Error Handling
-            const foundFruit = await Fruit.findById(req.params.fruitId).populate('user')
+            const foundFruit = await Fruit.findById(req.params.fruitId).populate('user').populate('comments.user')
             console.log(foundFruit)  // Using teh model (layout of data) to findById of the URL id
             res.render("fruits/show.ejs", { fruit: foundFruit })            // Render it on the show page. {NameYourReferencingInYourTemplate: TheVariableYou'veCollected}
         } else {
             next()                                                          // 404 Error Handling
         }
-        
-        
+
+
     } catch (error) {
         console.log(error)
-        res.send('Show Page is broken')
+       return res.status(500).send('An Error Occurred')
     }
-    
+
 })
 
 // ! Fruit Creation
@@ -43,8 +44,13 @@ router.get("/:fruitId", async (req, res, next) => {                     // Make 
 // * Render Page
 
 router.get('/new', (req, res) => {
+    try {
     res.render('fruits/new.ejs')
     // console.log('Fruits new is working')
+    }catch(error){
+        console.log(error)
+        res.status(error).send('This link is broken')
+    }
 })
 
 
@@ -63,7 +69,7 @@ router.post('/', async (req, res) => {                           // Making a rou
         res.redirect('/fruits')
     }                                // After that has run, it redirects back to the form to allow you to input again
     catch (error) {
-        res.send('Post is having an error')
+        res.status(500).render('fruits/new.ejs')
     }
 })
 
@@ -116,7 +122,7 @@ router.put('/:fruitId', async (req, res) => {                           // Async
 
     await Fruit.findByIdAndUpdate(req.params.fruitId, req.body)         // Find and Update the specific URL ID with the form req. bod 
     res.redirect(`/fruits/${req.params.fruitId}`)                       // Redirect to the given req.params.ID
-})  
+})
 
 
 
@@ -124,11 +130,11 @@ router.put('/:fruitId', async (req, res) => {                           // Async
 
 // * Create Comments
 
-router.post('/:fruitId/comments', async (req, res) => {
+router.post('/:fruitId/comments', isSignedIn, async (req, res) => {
     try {
         req.body.user = req.session.user._id
 
-        const fruit = await Fruit.findById(req.params.fruitId)
+       const fruit = await Fruit.findById(req.params.fruitId)
         if (!fruit) return next()
 
         fruit.comments.push(req.body)
@@ -143,8 +149,34 @@ router.post('/:fruitId/comments', async (req, res) => {
     }
 })
 
-// * Delete Comments
 
+
+
+// * Delete Comments
+router.delete('/:fruitId/comments/:commentsId/', async (req, res, next) => {
+    try {
+
+        const fruit = await Fruit.findById(req.params.fruitId)                  // Find the comment to delete and link to variable
+        if (!fruit)  next()
+
+        const commentToDelete = fruit.comments.id(req.params.commentsId)        // Variable commentToDelete = fruit we founds comment ID = the comment ID on the resource
+        if (!commentToDelete)  next()
+
+        if(!commentToDelete.user.equals(req.session.user._id)) {
+            throw new Error('current user is not allowed to delete this comment')
+        }
+
+        commentToDelete.deleteOne()                                             // Delete the single comment we found
+        await fruit.save()                                                      // save the comment delete
+
+        return res.redirect(`/fruits/${req.params.fruitId}`)                    // Return back to the fruit id we we're just on
+
+
+    } catch (error) {
+        console.log(error)
+        return res.send('Delete is broken')
+    }
+})
 
 
 
