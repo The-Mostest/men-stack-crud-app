@@ -68,36 +68,7 @@ app.get('/', async (req, res) => {
 })
 
 
-// const fruitData = [
-//     {
-//         name: "Apple",
-//         isReadyToEat: true
-//     },
-//     {
-//         name: "Banana",
-//         isReadyToEat: true
-//     },
-//     {
-//         name: "Mango",
-//         isReadyToEat: false
-//     },
-//     {
-//         name: "Pineapple",
-//         isReadyToEat: false
-//     },
-//     {
-//         name: "Orange",
-//         isReadyToEat: true
-//     }
-// ];
 
-
-
-// app.post('/seedButton', (req, res) => {
-
-
-//    
-// })
 
 
 
@@ -114,7 +85,7 @@ app.get('/vip-lounge', isSignedIn, (req, res) => {                              
 
 })
 
-app.get('views/secret/secret-space.ejs', isSignedIn, (req, res) => {
+app.get('/secret/secretSpace', (req, res) => {
     // res.render('/')
     res.send('hello')
 })

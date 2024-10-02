@@ -17,7 +17,8 @@ const commentSchema = new mongoose.Schema({
 const fruitSchema = new mongoose.Schema({             // creating the Schema and giving it a almost ruleset to follow
     name: String,
     isReadyToEat: Boolean,
-    user: {type: mongoose.Types.ObjectId, ref: 'User', required: true}
+    user: {type: mongoose.Types.ObjectId, ref: 'User', required: true},
+    comments: [commentSchema]
 })    
 
 const Fruit = mongoose.model("Fruit", fruitSchema)    // Linking the fruitSchema to the mongoose.model. With a string-singular and the Schema we made

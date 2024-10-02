@@ -37,11 +37,17 @@
 
 
 <!-- Comment Section -->
- <form action="/fruits/<%= fruit._id %>" method="POST"> 
-  <label for="text">Comment:</label> 
+ <% if (user) { %>
+  <form action="/fruits/<%= fruit._id %>/comments" method="POST"> 
+    <label for="text">Comment:</label> 
+    <input type="text" name="text" id="text">
+    <button class="button" type="submit"> Add Comment</button>
+    </form>
+  
+ <% }else { %>
+      <p> <a href="/auth/sign-in">Sign in to Leave Comment</a></p>
 
-
-
+<%}%>
 
 
 

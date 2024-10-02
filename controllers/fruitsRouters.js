@@ -116,13 +116,20 @@ router.put('/:fruitId', async (req, res) => {                    // Async as you
 
 router.post('/:fruitId/comments', async (req,res) => {
     try {
+        req.body.user = req.session.user._id
+
+        const fruit = await Fruit.findById(req.params.fruitId)
+        if (!fruit) return next()
+
+        fruit.comments.push(req.body)
+
+        await fruit.save()
+
         return res.redirect(`/fruits/${req.params.fruitId}`)
 
 
-
-        
     } catch (error) {
-        res.send('This comment is working')
+        res.send('This comment is not working')
     }
 })
 
