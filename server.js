@@ -85,9 +85,9 @@ app.get('/vip-lounge', isSignedIn, (req, res) => {                              
 
 })
 
-app.get('/secret/secretSpace', (req, res) => {
-    // res.render('/')
-    res.send('hello')
+app.get('/secret/secretSpace', isSignedIn, (req, res) => {
+    res.render('secret/secretSpace.ejs')
+    // res.send('hello')
 })
 
 
