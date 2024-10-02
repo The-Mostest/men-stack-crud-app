@@ -22,6 +22,7 @@
      
 
      <!-- The Action deletes the given fruitId along with modifying the request from a POST to a DELETE with the ?_Method -->
+      <!-- user does not equal nothing & the user within the fruit resource is equal to the user If  -->
      <% if (user !== null && fruit.user._id.equals(user._id)) { %>
       
       <form class='form' action="/fruits/<%=fruit._id%>?_method=DELETE" method="POST">     
@@ -38,6 +39,7 @@
 
 <!-- Comment Section -->
  <% if (user) { %>
+  <!-- Resource is. Basic resource/Id of the resource you want to access/comment section -->
   <form action="/fruits/<%= fruit._id %>/comments" method="POST"> 
     <label for="text">Comment:</label> 
     <input type="text" name="text" id="text">

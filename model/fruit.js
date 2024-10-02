@@ -4,11 +4,11 @@ const { push } = require('../DB/data/fruits')
 
 
 // SubDoc
-const commentSchema = new mongoose.Schema({
-    text: { type: String, required: true },
-    user: { type: mongoose.Types.ObjectId, ref: 'User', required: true }
+const commentSchema = new mongoose.Schema({                                 // New Sub-Schema 
+    text: { type: String, required: true },                                 // Text box for comments
+    user: { type: mongoose.Types.ObjectId, ref: 'User', required: true }    // Linking the Comment to a User
 }, {
-    timestamps: true
+    timestamps: true                                                        // Auto give timestamps for creation and update
 })
 
 

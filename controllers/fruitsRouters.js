@@ -16,17 +16,12 @@ router.get('', async (req, res) => {                            // New route for
 })
 
 
-// ! Create
-router.get('/new', (req, res) => {
-    res.render('fruits/new.ejs')
-    // console.log('Fruits new is working')
-})
 
 
 // ! Show
 router.get("/:fruitId", async (req, res, next) => {                     // Make sure that you add the ':' after the / - this templates the object
     try {
-
+        
         if (mongoose.Types.ObjectId.isValid(req.params.fruitId)) {          // 404 Error Handling
             const foundFruit = await Fruit.findById(req.params.fruitId).populate('user')
             console.log(foundFruit)  // Using teh model (layout of data) to findById of the URL id
@@ -34,16 +29,25 @@ router.get("/:fruitId", async (req, res, next) => {                     // Make 
         } else {
             next()                                                          // 404 Error Handling
         }
-
-
+        
+        
     } catch (error) {
         console.log(error)
         res.send('Show Page is broken')
     }
-
+    
 })
 
-// ! Create
+// ! Render Fruit Creation Resource page
+router.get('/new', (req, res) => {
+    res.render('fruits/new.ejs')
+    // console.log('Fruits new is working')
+})
+
+
+
+// * Actually Create the Fruit
+
 router.post('/', async (req, res) => {                           // Making a route with post to create
     try {
         req.body.user = req.session.user._id
@@ -61,7 +65,8 @@ router.post('/', async (req, res) => {                           // Making a rou
 })
 
 
-// ! Delete
+// * Delete
+
 router.delete('/:fruitId', async (req, res) => {                 // You'll use :fruitId again as you're trying to find it via the ID
 
     const deletedFruit = await Fruit.findId(req.params.fruitId)                // Await means this bit of code will run BEFORE the lower bits - Fruit being the layout of the data
@@ -78,15 +83,15 @@ router.delete('/:fruitId', async (req, res) => {                 // You'll use :
 })
 
 
-// ! Edit
+// ! Render Edit Page
 
 router.get('/:fruitId/edit', async (req, res, next) => {               // Only route to use 3 URLs. Async to make sure render comes last
-    
+
     const foundFruit = await Fruit.findById(req.params.fruitId)     // Model to find the ID
 
     if (foundFruit.user.equals(req.session.user._id)) {
         await Fruit.findByIdAndUpdate(req.params.fruitId, req.body)
-        console.log('Working') 
+        console.log('Working')
 
         res.render('fruits/edit.ejs', { fruit: foundFruit })             // Render with the page URL and Object to refer to and object
     } else {
@@ -97,16 +102,17 @@ router.get('/:fruitId/edit', async (req, res, next) => {               // Only r
 })
 
 
-router.put('/:fruitId', async (req, res) => {                    // Async as you want to do stuff before render
-    if (req.body.isReadyToEat === 'on') {                            // Changing check boxes from  string value to Boolean
+// * Update/Edit Fruit
+router.put('/:fruitId', async (req, res) => {                           // Async as you want to do stuff before render
+    if (req.body.isReadyToEat === 'on') {                               // Changing check boxes from  string value to Boolean
         req.body.isReadyToEat = true
     } else {
         req.body.isReadyToEat = false
     }
 
-    await Fruit.findByIdAndUpdate(req.params.fruitId, req.body)     // Find and Update the specific URL ID with the form req. bod 
-    res.redirect(`/fruits/${req.params.fruitId}`)                   // Redirect to the given req.params.ID
-})
+    await Fruit.findByIdAndUpdate(req.params.fruitId, req.body)         // Find and Update the specific URL ID with the form req. bod 
+    res.redirect(`/fruits/${req.params.fruitId}`)                       // Redirect to the given req.params.ID
+})  
 
 
 
@@ -114,7 +120,7 @@ router.put('/:fruitId', async (req, res) => {                    // Async as you
 
 // * Create Comments
 
-router.post('/:fruitId/comments', async (req,res) => {
+router.post('/:fruitId/comments', async (req, res) => {
     try {
         req.body.user = req.session.user._id
 
@@ -143,3 +149,5 @@ router.post('/:fruitId/comments', async (req,res) => {
 
 
 module.exports = router
+
+
