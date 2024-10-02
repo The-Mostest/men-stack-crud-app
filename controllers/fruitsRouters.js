@@ -110,7 +110,23 @@ router.put('/:fruitId', async (req, res) => {                    // Async as you
 
 
 
+// ! Comments Route
 
+// * Create Comments
+
+router.post('/:fruitId/comments', async (req,res) => {
+    try {
+        return res.redirect(`/fruits/${req.params.fruitId}`)
+
+
+
+        
+    } catch (error) {
+        res.send('This comment is working')
+    }
+})
+
+// * Delete Comments
 
 
 

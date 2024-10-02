@@ -1,4 +1,4 @@
-const fruits = [
+module.exports = [
     {
       name: "Apple",
       isReadyToEat: true

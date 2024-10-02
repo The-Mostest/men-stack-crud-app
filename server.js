@@ -23,7 +23,7 @@ const app = express();                                              // Creating 
 
 
 // ! -- Router/Controllers
-const fruitsRouters =  require('./controllers/fruitsRouters.js')
+const fruitsRouters = require('./controllers/fruitsRouters.js')
 const authRouters = require('./controllers/auth.js')
 
 // ! <-- Listen for Port
@@ -44,44 +44,77 @@ app.use(express.urlencoded({ extended: false }))                    // Telling u
 app.use(express.static("public"))                                   // How to link CSS to your CRUD app. Public is the folder that you keep stylesheets in
 app.use(morgan('dev'))
 app.use(session({
-    secret: process.env.SESSION_SECRET,     // The link to the env file
-    resave: false,                          // Stops saves to unmodified files
-    saveUninitialized: true,                // Create session that doesn't exist in our store
-    store: MongoStore.create({              // This creates a store within the database MONGODB to save your session across browser entry/exit
-        mongoUrl: process.env.MONGODB_URI,  // Linking the URL to MONGODB_URI
+    secret: process.env.SESSION_SECRET,                             // The link to the env file
+    resave: false,                                                  // Stops saves to unmodified files
+    saveUninitialized: true,                                        // Create session that doesn't exist in our store
+    store: MongoStore.create({                                      // This creates a store within the database MONGODB to save your session across browser entry/exit
+        mongoUrl: process.env.MONGODB_URI,                          // Linking the URL to MONGODB_URI
     })
 }))
-app.use(passUserToView)                     // BE SPECIFIC WHEN you place this. It needs to be used in all the routes BUT it needs to use session data
-                                            // If placed correctly it means no other thing needs to use req.session.user as it all should have a res.local
+app.use(passUserToView)                                             // BE SPECIFIC WHEN you place this. It needs to be used in all the routes BUT it needs to use session data
+                                                                    // If placed correctly it means no other thing needs to use req.session.user as it all should have a res.local
 
 // ! < --   Routes
 // !  Landing Page
 app.get('/', async (req, res) => {
     try {
-        
-        res.render('index.ejs', {           
-           
+
+        res.render('index.ejs', {
         })
-        
+
     } catch (error) {
         res.send('This GET isnt working')
-    }       
+    }
 })
+
+
+// const fruitData = [
+//     {
+//         name: "Apple",
+//         isReadyToEat: true
+//     },
+//     {
+//         name: "Banana",
+//         isReadyToEat: true
+//     },
+//     {
+//         name: "Mango",
+//         isReadyToEat: false
+//     },
+//     {
+//         name: "Pineapple",
+//         isReadyToEat: false
+//     },
+//     {
+//         name: "Orange",
+//         isReadyToEat: true
+//     }
+// ];
+
+
+
+// app.post('/seedButton', (req, res) => {
+
+
+//    
+// })
+
+
 
 
 //! Controller Routers
 app.use('/fruits', fruitsRouters)
-app.use('/auth', authRouters )
+app.use('/auth', authRouters)
 
 
 
-app.get('/vip-lounge', isSignedIn, (req,res) => {                                           // This is now linked to the middleware we created in the other file
-                                                                                            // If the session user is logged in (true)
-        return res.send(`<h1>Welcome to the part-ay ${req.session.user.username}</h1>`)     // Send Message
-    
+app.get('/vip-lounge', isSignedIn, (req, res) => {                                            // This is now linked to the middleware we created in the other file
+    // If the session user is logged in (true)
+    return res.send(`<h1>Welcome to the part-ay ${req.session.user.username}</h1>`)           // Send Message
+
 })
 
-app.get('views/secret/secret-space.ejs', isSignedIn, (req,res) => {
+app.get('views/secret/secret-space.ejs', isSignedIn, (req, res) => {
     // res.render('/')
     res.send('hello')
 })
@@ -92,6 +125,6 @@ app.get('*', (req, res) => {
     res.send('<h1>This page is in another castle</h1>')
 })
 
-mongoose.connection.on("connected", () => {                         // Checking the connection via a console.log
+mongoose.connection.on("connected", () => {                                                  // Checking the connection via a console.log
     console.log(`Connected to MongoDB`)
 })

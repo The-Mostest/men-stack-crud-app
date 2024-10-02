@@ -22,7 +22,7 @@
      
 
      <!-- The Action deletes the given fruitId along with modifying the request from a POST to a DELETE with the ?_Method -->
-     <% if (fruit.user._id.equals(user._id)) { %>
+     <% if (user !== null && fruit.user._id.equals(user._id)) { %>
       
       <form class='form' action="/fruits/<%=fruit._id%>?_method=DELETE" method="POST">     
         <button type="submit">Delete <%= fruit.name %></button>
@@ -31,6 +31,19 @@
       <a href="/fruits/<%= fruit._id %>/edit">Edit <%= fruit.name %></a>
       <% } %>
       
+
+      
       <h3>Created By: <%= fruit.user.username %></h3>
+
+
+<!-- Comment Section -->
+ <form action="/fruits/<%= fruit._id %>" method="POST"> 
+  <label for="text">Comment:</label> 
+
+
+
+
+
+
   </body>
 </html>

@@ -14,29 +14,40 @@
   <%- include("../views/partials/nav.ejs") %>
 
     <!-- Adding a link to the page  -->
-    
+
     <img class="fruit-pic1" src="https://cdn-icons-png.flaticon.com/128/5312/5312448.png"
-    alt="happy fruit salad bowl" />
-    
+      alt="happy fruit salad bowl" />
+
     <!-- if user is true (exists) then welcome them with their username  -->
     <% if (user) { %>
       <h1>Welcome to the Fruits app <%= user.username %>!</h1>
       <p>An app for collecting your favorite fruits.</p>
-      
+
       <!-- Adding a SIGNOUT LINK -->
       <a href="/auth/sign-out">
         <h4>Sign Out Here</h4>
       </a>
-      
+
       <!-- Otherwise give the links to sign up or sign in -->
       <% } else {%>
         <h1> You can't sit with us</h1>
         <a href="/auth/sign-in"> Join In</a> or <a href="/auth/sign-up"> Join Up</a>
         <% } %>
-        
-        <p><a href="/vip-lounge">Get into the VIP Users Only lounge!</a></p>
-        <button href="secret/secret-space.ejs">Shh</button>
-        <a href="/views/secret/secret-space.ejs">Secret</a>
+
+          <p><a href="/vip-lounge">Get into the VIP Users Only lounge!</a></p>
+
+
+
+        <!-- <form action="/seedButton" method="POST">
+          <button type="submit">Shh</button>
+        </form> -->
+
+
+
+
+
+
+          <a href="/views/secret/secret-space.ejs">Secret</a>
 
 
 </body>
