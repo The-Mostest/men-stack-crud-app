@@ -38,7 +38,10 @@ router.get("/:fruitId", async (req, res, next) => {                     // Make 
     
 })
 
-// ! Render Fruit Creation Resource page
+// ! Fruit Creation
+
+// * Render Page
+
 router.get('/new', (req, res) => {
     res.render('fruits/new.ejs')
     // console.log('Fruits new is working')
@@ -83,8 +86,9 @@ router.delete('/:fruitId', async (req, res) => {                 // You'll use :
 })
 
 
-// ! Render Edit Page
+// ! Edit Page Route
 
+// * Render Page 
 router.get('/:fruitId/edit', async (req, res, next) => {               // Only route to use 3 URLs. Async to make sure render comes last
 
     const foundFruit = await Fruit.findById(req.params.fruitId)     // Model to find the ID
