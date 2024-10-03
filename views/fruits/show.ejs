@@ -69,13 +69,14 @@
                             </strong>
                             <%= comment.text %> <br>
                               <small>Written on: <%= new Date(comment.createdAt).toUTCString() %></small>
-
+                            <% if (user && comment.user._id.equals(user._id)) { %>
                               <form class="delete"
                                 action="/fruits/<%= fruit._id %>/comments/<%= comment._id  %>?_method=DELETE"
                                 method="POST">
                                 <button type="submit">Delete</button>
-                                <% }) %>
                               </form>
+                              <% } %>
+                              <% }) %>
                           </div>
                       </p>
 

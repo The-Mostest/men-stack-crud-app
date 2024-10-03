@@ -60,16 +60,16 @@ router.post('/', async (req, res) => {                           // Making a rou
         } else {
             req.body.isReadyToEat = false                           // The opposite conversion
         }
-        await Fruit.create(req.body)                                // Await to do it after the rest of the block. Fruit.create(req.body) using the Fruit model to create what is put in the req.body
+        await Fruit.create(req.body)                                  // Await to do it after the rest of the block. Fruit.create(req.body) using the Fruit model to create what is put in the req.body
         res.redirect('/fruits')
-    }                                // After that has run, it redirects back to the form to allow you to input again
+    }                                                                 // After that has run, it redirects back to the form to allow you to input again
     catch (error) {
         res.send('Post is having an error')
     }
 })
 
 
-// * Delete
+// * Delete the Fruit
 
 router.delete('/:fruitId', async (req, res) => {                 // You'll use :fruitId again as you're trying to find it via the ID
 
@@ -92,7 +92,7 @@ router.delete('/:fruitId', async (req, res) => {                 // You'll use :
 // * Render Page 
 router.get('/:fruitId/edit', async (req, res, next) => {               // Only route to use 3 URLs. Async to make sure render comes last
 
-    const foundFruit = await Fruit.findById(req.params.fruitId)     // Model to find the ID
+    const foundFruit = await Fruit.findById(req.params.fruitId)         // Model to find the ID
 
     if (foundFruit.user.equals(req.session.user._id)) {
         await Fruit.findByIdAndUpdate(req.params.fruitId, req.body)
